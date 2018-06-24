@@ -28,11 +28,13 @@ ext {
 }
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-webflux')
-	compile('com.vaadin:vaadin-spring-boot-starter')
+	compile("org.springframework.boot:spring-boot-starter-webflux")
+	compile("com.vaadin:vaadin-spring-boot-starter")
 	compile("com.vaadin:vaadin-push:$vaadinVersion")
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('io.projectreactor:reactor-test')
+	compile("org.apache.commons:commons-lang3:3.7")
+
+	testCompile("org.springframework.boot:spring-boot-starter-test")
+	testCompile("io.projectreactor:reactor-test")
 }
 
 dependencyManagement {

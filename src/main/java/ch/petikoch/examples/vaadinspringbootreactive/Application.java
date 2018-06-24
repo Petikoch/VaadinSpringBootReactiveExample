@@ -1,7 +1,8 @@
 package ch.petikoch.examples.vaadinspringbootreactive;
 
-import ch.petikoch.examples.vaadinspringbootreactive.service.WorldCupTicker;
-import ch.petikoch.examples.vaadinspringbootreactive.vaadin.MainLayout;
+import ch.petikoch.examples.vaadinspringbootreactive.gui.vaadin.VaadinGui;
+import ch.petikoch.examples.vaadinspringbootreactive.service.ChatService;
+import ch.petikoch.examples.vaadinspringbootreactive.service.WorldCupTickerService;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
@@ -14,26 +15,36 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Application {
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
 
-    @Push
-    @Theme("valo")
-    @SpringUI(path = "")
-    public static class VaadinUI extends UI {
+	@Push
+	@Theme("valo")
+	@SpringUI(path = "")
+	public static class VaadinUI extends UI {
 
-        @Autowired
-        WorldCupTicker worldCupTickerService;
-        @Autowired
-        MainLayout mainLayout;
+		@Autowired
+		WorldCupTickerService worldCupTickerServiceService;
+		@Autowired
+		ChatService chatService;
 
-        @Override
-        protected void init(VaadinRequest request) {
-            setContent(mainLayout);
+		@Autowired
+		VaadinGui vaadinGui;
 
-	        worldCupTickerService.worldCupResults().subscribe(wmResultat -> mainLayout.setTextAreaValue(wmResultat));
-        }
+		@Override
+		protected void init(VaadinRequest request) {
+			setContent(vaadinGui);
 
-    }
+			worldCupTickerServiceService.worldCupResults()
+					.subscribe(worldCupResults -> vaadinGui.setWorldCupTickerText(worldCupResults));
+
+			chatService.chatMessages()
+					.subscribe(msg -> vaadinGui.addChatMessage(msg));
+			vaadinGui.myChatMessages()
+					.map(msg -> "[" + getUIId() + "] " + msg)
+					.subscribe(msg -> chatService.addChatMessage(msg));
+		}
+
+	}
 }

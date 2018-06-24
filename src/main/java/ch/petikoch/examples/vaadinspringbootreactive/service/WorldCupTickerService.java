@@ -6,7 +6,7 @@ import reactor.core.publisher.Flux;
 import java.time.Duration;
 
 @Service
-public class WorldCupTicker {
+public class WorldCupTickerService {
 
 	public Flux<String> worldCupResults() {
 		return Flux.just(
